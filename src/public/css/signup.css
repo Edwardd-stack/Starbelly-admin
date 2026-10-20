@@ -1,5 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
 
+/* Chrome autofill'ning oq fonini yashiradi (transition hiylasi: fon o'zgarishi ~7 kunga cho'ziladi, matn va kursor rangi oq qilib qo'yiladi) */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #fff;
+  caret-color: #fff;
+  transition:
+    background-color 600000s 0s,
+    color 600000s 0s;
+}
+
 :root {
   /*Color mode HSL(hue, saturation, lightness)*/
   --white-color: hsl(0, 0%, 100%);
