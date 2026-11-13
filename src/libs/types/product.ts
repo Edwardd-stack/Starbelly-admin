@@ -17,6 +17,9 @@ export interface Product {
   productDesc?: string;
   productImages: string[];
   productViews: number;
+  productLikes: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface ProductInput {
@@ -29,11 +32,9 @@ export interface ProductInput {
   productVolume?: number;
   productDesc?: string;
   productImages?: string[];
-  productViews?: number;
 }
 
 export interface ProductUpdateInput {
-  _id: ObjectId;
   productStatus?: ProductStatus;
   productCollection?: ProductCollection;
   productName?: string;
@@ -42,6 +43,16 @@ export interface ProductUpdateInput {
   productSize?: ProductSize;
   productVolume?: number;
   productDesc?: string;
-  productImages?: string[];
-  productViews?: number;
 }
+
+/** Admin yangilay oladigan maydonlar (views, likes, images — yo'q) */
+export const PRODUCT_UPDATABLE_FIELDS = [
+  "productStatus",
+  "productCollection",
+  "productName",
+  "productPrice",
+  "productLeftCount",
+  "productSize",
+  "productVolume",
+  "productDesc",
+] as const;

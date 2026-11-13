@@ -4,11 +4,13 @@ import {
   Member,
   MemberInput,
   MemberUpdateInput,
+  MEMBER_SIGNUP_FIELDS,
 } from "../libs/types/member";
 import Errors, { HttpCode, Message } from "../libs/Errors";
 import { MemberStatus, MemberType } from "../libs/enums/member.enum";
 import * as bcrypt from "bcryptjs";
 import { shapeIntoMongooseObjectId } from "../libs/config";
+import { pickFields } from "../libs/utils/sanitize";
 
 class MemberService {
   private readonly memberModel;
@@ -20,11 +22,11 @@ class MemberService {
 
   // Signup
   public async signup(input: MemberInput): Promise<Member> {
-    const salt = await bcrypt.genSalt();
-    input.memberPassword = await bcrypt.hash(input.memberPassword, salt);
+    // Faqat ruxsat etilgan maydonlar; memberType har doim USER
+    const newMember = await this.prepareNewMember(input, MemberType.USER);
 
     try {
-      const result = await this.memberModel.create(input);
+      const result = await this.memberModel.create(newMember);
       result.memberPassword = "";
       return result.toJSON();
     } catch (err) {
@@ -69,11 +71,10 @@ class MemberService {
       .exec();
     if (exist) throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
 
-    const salt = await bcrypt.genSalt();
-    input.memberPassword = await bcrypt.hash(input.memberPassword, salt);
+    const newMember = await this.prepareNewMember(input, MemberType.ADMIN);
 
     try {
-      const result = await this.memberModel.create(input);
+      const result = await this.memberModel.create(newMember);
       result.memberPassword = "";
       return result;
     } catch (err) {
@@ -117,14 +118,40 @@ class MemberService {
   }
 
   // update ChosenUser
+  // Admin faqat USER'ning statusini o'zgartira oladi (ACTIVE / BLOCK / DELETE)
   public async updateChosenUser(input: MemberUpdateInput): Promise<Member> {
-    input._id = shapeIntoMongooseObjectId(input._id);
+    const memberStatus = input?.memberStatus;
+    if (!input?._id || !memberStatus || !Object.values(MemberStatus).includes(memberStatus))
+      throw new Errors(HttpCode.BAD_REQUEST, Message.INVALID_INPUT);
+
+    const id = shapeIntoMongooseObjectId(input._id);
     const result = await this.memberModel
-      .findByIdAndUpdate({ _id: input._id }, input, { new: true })
+      .findOneAndUpdate(
+        { _id: id, memberType: MemberType.USER },
+        { memberStatus },
+        { new: true, runValidators: true },
+      )
       .exec();
     if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
 
     return result;
+  }
+
+  /** HELPERS **/
+
+  // Yangi a'zo uchun xavfsiz obyekt: whitelist + hash + server belgilagan memberType
+  private async prepareNewMember(
+    input: MemberInput,
+    memberType: MemberType,
+  ): Promise<MemberInput> {
+    const data = pickFields(input, MEMBER_SIGNUP_FIELDS);
+    if (!data.memberNick || !data.memberPhone || !data.memberPassword)
+      throw new Errors(HttpCode.BAD_REQUEST, Message.INVALID_INPUT);
+
+    const salt = await bcrypt.genSalt();
+    const memberPassword = await bcrypt.hash(String(data.memberPassword), salt);
+
+    return { ...data, memberPassword, memberType };
   }
 }
 

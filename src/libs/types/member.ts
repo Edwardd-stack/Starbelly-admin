@@ -42,7 +42,7 @@ export interface LoginInput {
 }
 
 export interface MemberUpdateInput {
-  _id: ObjectId;
+  _id: string;
   memberStatus?: MemberStatus;
   memberNick?: string;
   memberPhone?: string;
@@ -58,3 +58,13 @@ export interface AdminRequest extends Request {
   file: Express.Multer.File;
   files: Express.Multer.File[];
 }
+
+/** Signup paytida mijozdan qabul qilinadigan maydonlar (memberType, memberStatus, memberPoints — yo'q) */
+export const MEMBER_SIGNUP_FIELDS = [
+  "memberNick",
+  "memberPhone",
+  "memberPassword",
+  "memberAddress",
+  "memberDesc",
+  "memberImage",
+] as const;

@@ -62,7 +62,7 @@ adminController.processSignup = async (req: AdminRequest, res: Response) => {
 
     const newMember: MemberInput = req.body;
     newMember.memberImage = file?.path.replace(/\\/g, "/");
-    newMember.memberType = MemberType.ADMIN;
+    // memberType = ADMIN service ichida belgilanadi (req.body'ga ishonilmaydi)
     const result = await memberService.processSignup(newMember);
 
     // SESSIONS AUTHENTICATION
