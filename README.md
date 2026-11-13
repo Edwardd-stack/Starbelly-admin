@@ -70,16 +70,66 @@ erDiagram
   PRODUCT ||--o{ LIKE : receives
   TABLE ||--o{ RESERVATION : "reserved for"
 
-  MEMBER { ObjectId _id string memberNick UK string memberPhone UK string memberType "USER|ADMIN" number memberPoints }
-  PRODUCT { ObjectId _id string productName number productPrice string productCollection number productLikes number productViews }
-  ORDER { ObjectId _id ObjectId memberId number orderTotal number orderDelivery string orderStatus "PAUSE|PROCESS|FINISH|DELETE" }
-  ORDER_ITEM { ObjectId orderId ObjectId productId number itemQuantity number itemPrice "주문 시점 가격" }
-  PAYMENT { ObjectId orderId UK string paymentKey UK number paymentAmount string paymentStatus }
-  POINT_HISTORY { ObjectId memberId number pointAmount string pointReason ObjectId refId number balanceAfter }
-  TABLE { number tableNumber UK number tableSeats }
-  RESERVATION { ObjectId tableId string reservationDate string timeSlot number guestCount boolean reservationActive }
-  LIKE { ObjectId memberId ObjectId likeRefId "unique(memberId, likeRefId)" }
-  VIEW { ObjectId memberId ObjectId viewRefId "unique(memberId, viewRefId)" }
+  MEMBER {
+    ObjectId _id
+    string memberNick UK
+    string memberPhone UK
+    string memberType "USER|ADMIN"
+    number memberPoints
+  }
+  PRODUCT {
+    ObjectId _id
+    string productName
+    number productPrice
+    string productCollection
+    number productLikes
+    number productViews
+  }
+  ORDER {
+    ObjectId _id
+    ObjectId memberId
+    number orderTotal
+    number orderDelivery
+    string orderStatus "PAUSE|PROCESS|FINISH|DELETE"
+  }
+  ORDER_ITEM {
+    ObjectId orderId
+    ObjectId productId
+    number itemQuantity
+    number itemPrice "주문 시점 가격"
+  }
+  PAYMENT {
+    ObjectId orderId UK
+    string paymentKey UK
+    number paymentAmount
+    string paymentStatus
+  }
+  POINT_HISTORY {
+    ObjectId memberId
+    number pointAmount
+    string pointReason
+    ObjectId refId
+    number balanceAfter
+  }
+  TABLE {
+    number tableNumber UK
+    number tableSeats
+  }
+  RESERVATION {
+    ObjectId tableId
+    string reservationDate
+    string timeSlot
+    number guestCount
+    boolean reservationActive
+  }
+  LIKE {
+    ObjectId memberId
+    ObjectId likeRefId "unique(memberId, likeRefId)"
+  }
+  VIEW {
+    ObjectId memberId
+    ObjectId viewRefId "unique(memberId, viewRefId)"
+  }
 ```
 
 ---
