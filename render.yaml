@@ -1,0 +1,22 @@
+# Render Blueprint: backend + admin panel
+services:
+  - type: web
+    name: starbelly-api
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /member/restaurant
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: SECRET_TOKEN
+        generateValue: true
+      - key: CLIENT_URL
+        sync: false # masalan: https://starbelly.vercel.app
+      - key: TOSS_SECRET_KEY
+        value: test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6
