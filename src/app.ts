@@ -32,7 +32,7 @@ app.use(
   }),
 );
 app.use(cookieParser());
-app.use(morgan(MORGAN_FORMAT)); // Log mehanizm
+if (process.env.NODE_ENV !== "test") app.use(morgan(MORGAN_FORMAT)); // Log mehanizm
 
 /** 2-SESSIONS integration **/
 export const sessionMiddleware = session({
