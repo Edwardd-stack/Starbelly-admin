@@ -18,6 +18,8 @@ export enum Message {
   INVALID_INPUT = "Invalid input data!",
   PRODUCT_UNAVAILABLE = "Some products are not available!",
   INVALID_STATUS_CHANGE = "This status change is not allowed!",
+  PAYMENT_AMOUNT_MISMATCH = "Payment amount does not match the order!",
+  PAYMENT_FAILED = "Payment confirmation failed!",
 
   USED_NICK_PHONE = "You are inserting already used nick or phone!",
   NO_MEMBER_NICK = "No member with that member nick!",

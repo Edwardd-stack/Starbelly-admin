@@ -1,0 +1,11 @@
+/** Toss Payments to'lov holatlari */
+export enum PaymentStatus {
+  READY = "READY",
+  IN_PROGRESS = "IN_PROGRESS",
+  WAITING_FOR_DEPOSIT = "WAITING_FOR_DEPOSIT",
+  DONE = "DONE",
+  CANCELED = "CANCELED",
+  PARTIAL_CANCELED = "PARTIAL_CANCELED",
+  ABORTED = "ABORTED",
+  EXPIRED = "EXPIRED",
+}
