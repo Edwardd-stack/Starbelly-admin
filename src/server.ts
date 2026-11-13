@@ -5,12 +5,14 @@ import mongoose from "mongoose";
 import app, { sessionMiddleware } from "./app";
 import { initSocket } from "./libs/socket";
 import ReservationService from "./models/Reservation.service";
+import { restoreSeedImages } from "./libs/utils/seedImages";
 
 mongoose
   .connect(process.env.MONGO_URL as string, {})
   .then(() => {
     // TCP1
     console.log("MongoDB connection succeed");
+    restoreSeedImages();
     new ReservationService()
       .ensureDefaultTables()
       .catch((err) => console.log("ERROR, ensureDefaultTables:", err));
