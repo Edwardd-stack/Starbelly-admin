@@ -41,6 +41,7 @@ routerAdmin.post(
 );
 
 /** Order Admin (oshxona) **/
+routerAdmin.get("/order/all", adminController.verifyAdmin, orderController.getKitchenPage);
 routerAdmin.post(
   "/order/:id/finish",
   adminController.verifyAdmin,

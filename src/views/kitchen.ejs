@@ -1,0 +1,39 @@
+<%- include('includes/header') %>
+
+<link rel="stylesheet" type="text/css" href="/css/admin.css" />
+
+<body>
+  <canvas class="liquid-canvas"></canvas>
+
+  <div class="admin-container">
+    <%- include('includes/nav', { active: 'kitchen' }) %>
+
+    <div class="admin-board">
+      <div class="board-head">
+        <div>
+          <h1 class="board-title">Kitchen</h1>
+          <div class="board-sub">To'langan buyurtmalar — yangilari avtomatik paydo bo'ladi</div>
+        </div>
+        <span class="live-dot" id="live-status">Offline</span>
+      </div>
+
+      <div class="card-grid" id="order-grid">
+        <% orders.forEach(function(order) { %>
+          <%- include('includes/kitchen-card', { order: order }) %>
+        <% }) %>
+      </div>
+      <div class="empty-state" id="empty-state" style="<%= orders.length ? 'display:none' : '' %>">
+        Hozircha tayyorlanadigan buyurtma yo'q
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/kitchen.js"></script>
+  <script src="/js/background.js"></script>
+</body>
+
+<%- include('includes/footer') %>
+</html>

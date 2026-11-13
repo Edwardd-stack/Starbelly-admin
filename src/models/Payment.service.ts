@@ -15,14 +15,18 @@ import { OrderStatus } from "../libs/enums/order.enum";
 import { PaymentStatus } from "../libs/enums/payment.enum";
 import { tossRequest } from "../libs/utils/toss";
 import { isDuplicateKeyError } from "../libs/utils/mongo";
+import { emitToAdmin, emitToMember, SocketEvent } from "../libs/socket";
+import OrderService from "./Order.service";
 
 class PaymentService {
   private readonly paymentModel;
   private readonly orderModel;
+  private readonly orderService;
 
   constructor() {
     this.paymentModel = PaymentModel;
     this.orderModel = OrderModel;
+    this.orderService = new OrderService();
   }
 
   /**
@@ -94,6 +98,7 @@ class PaymentService {
 
         result = { order: paidOrder, payment: payment.toObject() as unknown as Payment };
       });
+      await this.notifyPaid(String(orderId), member._id);
       return result as PaymentConfirmResult;
     } catch (err) {
       // Parallel ikkinchi so'rov: birinchisi allaqachon saqlagan
@@ -130,6 +135,13 @@ class PaymentService {
         )
         .exec();
     }
+  }
+
+  // To'langan buyurtma oshxona paneliga va mijozga jonli yuboriladi
+  private async notifyPaid(orderId: string, memberId: string): Promise<void> {
+    const [kitchenOrder] = await this.orderService.getKitchenOrders(orderId);
+    if (kitchenOrder) emitToAdmin(SocketEvent.ORDER_NEW, kitchenOrder);
+    emitToMember(memberId, SocketEvent.ORDER_STATUS, { orderId, orderStatus: OrderStatus.PROCESS });
   }
 }
 

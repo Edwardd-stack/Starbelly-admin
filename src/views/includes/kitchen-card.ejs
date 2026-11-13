@@ -1,0 +1,17 @@
+<div class="glass-card" data-order-id="<%= order._id %>">
+  <div class="card-top">
+    <span class="card-id">#<%= String(order._id).slice(-6).toUpperCase() %></span>
+    <span class="card-time"><%= new Date(order.updatedAt).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) %></span>
+  </div>
+  <div class="board-sub" style="margin-bottom: 10px"><%= order.memberData ? order.memberData.memberNick : '' %></div>
+  <ul>
+    <% (order.orderItems || []).forEach(function(item) {
+         var product = (order.productData || []).find(function(p) { return String(p._id) === String(item.productId); }); %>
+      <li><span><%= product ? product.productName : 'Product' %></span><b>× <%= item.itemQuantity %></b></li>
+    <% }) %>
+  </ul>
+  <div class="card-foot">
+    <b>₩<%= Number(order.orderTotal).toLocaleString('ko-KR') %></b>
+    <button class="btn-pill btn-ok finish-btn" data-order-id="<%= order._id %>">Tayyor</button>
+  </div>
+</div>

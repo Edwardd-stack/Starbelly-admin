@@ -58,6 +58,17 @@ orderController.cancelOrder = async (req: ExtendedRequest, res: Response) => {
 
 /** SSR (admin / oshxona) **/
 
+// Kitchen page
+orderController.getKitchenPage = async (req: Request, res: Response) => {
+  try {
+    const orders = await orderService.getKitchenOrders();
+    res.render("kitchen", { orders });
+  } catch (err) {
+    console.log("Error, getKitchenPage:", err);
+    res.redirect("/admin/login");
+  }
+};
+
 // Finish order (PROCESS -> FINISH, ball beriladi)
 orderController.finishOrder = async (req: Request, res: Response) => {
   try {

@@ -17,6 +17,7 @@ import {
   TIME_SLOTS,
 } from "../libs/enums/reservation.enum";
 import { isDuplicateKeyError } from "../libs/utils/mongo";
+import { emitToAdmin, SocketEvent } from "../libs/socket";
 
 const DEFAULT_TABLES = [
   { tableNumber: 1, tableSeats: 2 },
@@ -105,7 +106,13 @@ class ReservationService {
             ? input.reservationMemo.trim().slice(0, 200)
             : undefined,
       });
-      return created.toObject() as unknown as Reservation;
+      const reservation = created.toObject() as unknown as Reservation;
+      emitToAdmin(SocketEvent.RESERVATION_NEW, {
+        ...reservation,
+        tableData: table,
+        memberData: { memberNick: member.memberNick },
+      });
+      return reservation;
     } catch (err) {
       if (isDuplicateKeyError(err))
         throw new Errors(HttpCode.CONFLICT, Message.ALREADY_RESERVED);

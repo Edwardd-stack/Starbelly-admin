@@ -34,17 +34,16 @@ app.use(cookieParser());
 app.use(morgan(MORGAN_FORMAT)); // Log mehanizm
 
 /** 2-SESSIONS integration **/
-app.use(
-  session({
-    secret: String(process.env.SESSION_SECRET),
-    cookie: {
-      maxAge: 1000 * 3600 * 6, // 6h
-    },
-    store: store,
-    resave: true,
-    saveUninitialized: true, // login bo'lmasdan ishlatgan userlarni ham saqlaydi
-  }),
-);
+export const sessionMiddleware = session({
+  secret: String(process.env.SESSION_SECRET),
+  cookie: {
+    maxAge: 1000 * 3600 * 6, // 6h
+  },
+  store: store,
+  resave: true,
+  saveUninitialized: true, // login bo'lmasdan ishlatgan userlarni ham saqlaydi
+});
+app.use(sessionMiddleware);
 // global variable
 app.use(function (req, res, next) {
   const sessionInstance = req.session as T;

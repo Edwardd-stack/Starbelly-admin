@@ -6,6 +6,7 @@ import Errors, { HttpCode, Message } from "../libs/Errors";
 import { ORDER_RULES, POINT_PER_KRW, shapeIntoMongooseObjectId } from "../libs/config";
 import { PointReason } from "../libs/enums/point.enum";
 import PointService from "./Point.service";
+import { emitToMember, SocketEvent } from "../libs/socket";
 import { Order, OrderInquiry, OrderItemInput, OrderUpdateInput } from "../libs/types/order";
 import { TokenMember } from "../libs/types/member";
 import { Product } from "../libs/types/product";
@@ -138,6 +139,47 @@ class OrderService {
 
   /** SSR (admin / oshxona) **/
 
+  // Oshxona: to'langan (PROCESS) buyurtmalar, eskisi birinchi
+  public async getKitchenOrders(orderId?: string): Promise<Order[]> {
+    const match: Record<string, unknown> = { orderStatus: OrderStatus.PROCESS };
+    if (orderId) match._id = shapeIntoMongooseObjectId(orderId);
+
+    return await this.orderModel
+      .aggregate([
+        { $match: match },
+        { $sort: { updatedAt: 1 } },
+        { $limit: 50 },
+        {
+          $lookup: {
+            from: "orderItems",
+            localField: "_id",
+            foreignField: "orderId",
+            as: "orderItems",
+          },
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "orderItems.productId",
+            foreignField: "_id",
+            as: "productData",
+            pipeline: [{ $project: { productName: 1, productImages: { $slice: ["$productImages", 1] } } }],
+          },
+        },
+        {
+          $lookup: {
+            from: "members",
+            localField: "memberId",
+            foreignField: "_id",
+            as: "memberData",
+            pipeline: [{ $project: { memberNick: 1, memberPhone: 1 } }],
+          },
+        },
+        { $unwind: "$memberData" },
+      ])
+      .exec();
+  }
+
   /**
    * Oshxona buyurtmani yakunlaydi (PROCESS -> FINISH) va mijozga ball beriladi.
    * Status, ledger yozuvi va balans bitta tranzaksiyada.
@@ -170,7 +212,13 @@ class OrderService {
           );
         finished = order;
       });
-      return finished as Order;
+      const order = finished as Order;
+      // Mijozning Orders sahifasi darhol yangilanadi
+      emitToMember(String(order.memberId), SocketEvent.ORDER_STATUS, {
+        orderId: String(order._id),
+        orderStatus: order.orderStatus,
+      });
+      return order;
     } finally {
       await session.endSession();
     }
