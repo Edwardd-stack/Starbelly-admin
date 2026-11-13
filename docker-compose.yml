@@ -1,0 +1,38 @@
+# Lokal ishga tushirish: docker compose up --build  ->  http://localhost:3007/admin
+services:
+  mongo:
+    image: mongo:7
+    # Tranzaksiyalar uchun replica set kerak (bitta node yetarli)
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: >
+        echo "try { rs.status() } catch (e) { rs.initiate({ _id: 'rs0', members: [{ _id: 0, host: 'mongo:27017' }] }) }"
+        | mongosh --quiet
+      interval: 5s
+      timeout: 10s
+      retries: 10
+
+  api:
+    build: .
+    depends_on:
+      mongo:
+        condition: service_healthy
+    ports:
+      - "3007:3007"
+    environment:
+      PORT: 3007
+      MONGO_URL: mongodb://mongo:27017/starbelly?replicaSet=rs0
+      SESSION_SECRET: docker-session-secret
+      SECRET_TOKEN: docker-token-secret
+      CLIENT_URL: http://localhost:5000,http://localhost:5001
+      TOSS_SECRET_KEY: test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6
+    volumes:
+      - uploads:/app/uploads
+
+volumes:
+  mongo-data:
+  uploads:
