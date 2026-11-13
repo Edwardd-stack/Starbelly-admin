@@ -18,6 +18,7 @@ router.post(
   memberController.updateMember,
 );
 router.get("/member/top-users", memberController.getTopUsers);
+router.get("/member/points", memberController.verifyAuth, memberController.getPointHistory);
 
 /** Product **/
 router.get("/product/all", productController.getProducts);

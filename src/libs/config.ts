@@ -1,5 +1,8 @@
 export const AUTH_TIMER = 6; // soat
 
+/** Ball: har 1000 KRW uchun 1 ball */
+export const POINT_PER_KRW = 1000;
+
 /** Buyurtma qoidalari (narxlar KRW, butun son) */
 export const ORDER_RULES = {
   FREE_DELIVERY_FROM: 30000, // shundan kam bo'lsa yetkazish pullik

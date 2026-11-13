@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import { T } from "../libs/types/common";
 import { ExtendedRequest } from "../libs/types/member";
 import Errors, { HttpCode } from "../libs/Errors";
@@ -52,6 +52,19 @@ orderController.cancelOrder = async (req: ExtendedRequest, res: Response) => {
     res.status(HttpCode.OK).json(result);
   } catch (err) {
     console.log("Error, cancelOrder:", err);
+    sendError(res, err);
+  }
+};
+
+/** SSR (admin / oshxona) **/
+
+// Finish order (PROCESS -> FINISH, ball beriladi)
+orderController.finishOrder = async (req: Request, res: Response) => {
+  try {
+    const result = await orderService.finishOrder(String(req.params.id));
+    res.status(HttpCode.OK).json({ data: result });
+  } catch (err) {
+    console.log("Error, finishOrder:", err);
     sendError(res, err);
   }
 };

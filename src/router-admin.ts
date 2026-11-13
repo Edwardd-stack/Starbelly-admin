@@ -2,6 +2,7 @@ import express from "express";
 const routerAdmin = express.Router();
 import adminController from "./controllers/admin.controller";
 import productController from "./controllers/product.controller";
+import orderController from "./controllers/order.controller";
 import makeUploader from "./libs/utils/uploader";
 
 /** Admin **/
@@ -36,6 +37,13 @@ routerAdmin.post(
   "/product/:id", // params
   adminController.verifyAdmin,
   productController.updateChosenProduct,
+);
+
+/** Order Admin (oshxona) **/
+routerAdmin.post(
+  "/order/:id/finish",
+  adminController.verifyAdmin,
+  orderController.finishOrder,
 );
 
 /** User Admin **/

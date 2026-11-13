@@ -3,7 +3,9 @@ import OrderModel from "../schema/Order.model";
 import OrderItemModel from "../schema/OrderItem.model";
 import ProductModel from "../schema/Product.model";
 import Errors, { HttpCode, Message } from "../libs/Errors";
-import { ORDER_RULES, shapeIntoMongooseObjectId } from "../libs/config";
+import { ORDER_RULES, POINT_PER_KRW, shapeIntoMongooseObjectId } from "../libs/config";
+import { PointReason } from "../libs/enums/point.enum";
+import PointService from "./Point.service";
 import { Order, OrderInquiry, OrderItemInput, OrderUpdateInput } from "../libs/types/order";
 import { TokenMember } from "../libs/types/member";
 import { Product } from "../libs/types/product";
@@ -14,11 +16,13 @@ class OrderService {
   private readonly orderModel;
   private readonly orderItemModel;
   private readonly productModel;
+  private readonly pointService;
 
   constructor() {
     this.orderModel = OrderModel;
     this.orderItemModel = OrderItemModel;
     this.productModel = ProductModel;
+    this.pointService = new PointService();
   }
 
   /** SPA **/
@@ -130,6 +134,46 @@ class OrderService {
     if (!result) throw new Errors(HttpCode.BAD_REQUEST, Message.INVALID_STATUS_CHANGE);
 
     return result;
+  }
+
+  /** SSR (admin / oshxona) **/
+
+  /**
+   * Oshxona buyurtmani yakunlaydi (PROCESS -> FINISH) va mijozga ball beriladi.
+   * Status, ledger yozuvi va balans bitta tranzaksiyada.
+   */
+  public async finishOrder(orderId: string): Promise<Order> {
+    const session = await mongoose.startSession();
+    try {
+      let finished: Order | undefined;
+      await session.withTransaction(async () => {
+        const order = await this.orderModel
+          .findOneAndUpdate(
+            { _id: shapeIntoMongooseObjectId(orderId), orderStatus: OrderStatus.PROCESS },
+            { orderStatus: OrderStatus.FINISH },
+            { new: true, session },
+          )
+          .lean<Order>()
+          .exec();
+        if (!order) throw new Errors(HttpCode.BAD_REQUEST, Message.INVALID_STATUS_CHANGE);
+
+        const points = Math.floor(order.orderTotal / POINT_PER_KRW);
+        if (points > 0)
+          await this.pointService.addPoints(
+            {
+              memberId: order.memberId,
+              pointAmount: points,
+              pointReason: PointReason.ORDER_FINISH,
+              refId: order._id,
+            },
+            session,
+          );
+        finished = order;
+      });
+      return finished as Order;
+    } finally {
+      await session.endSession();
+    }
   }
 
   /** HELPERS **/

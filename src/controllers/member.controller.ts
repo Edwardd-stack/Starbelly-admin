@@ -9,11 +9,13 @@ import {
 } from "../libs/types/member";
 import MemberService from "../models/Member.service";
 import AuthService from "../models/Auth.service";
+import PointService from "../models/Point.service";
 import Errors, { HttpCode, Message } from "../libs/Errors";
 import { AUTH_TIMER } from "../libs/config";
 
 const memberService = new MemberService();
 const authService = new AuthService();
+const pointService = new PointService();
 
 const memberController: T = {};
 
@@ -115,6 +117,17 @@ memberController.getTopUsers = async (req: Request, res: Response) => {
     res.status(HttpCode.OK).json(result);
   } catch (err) {
     console.log("Error, getTopUsers:", err);
+    sendError(res, err);
+  }
+};
+
+// Ball tarixi
+memberController.getPointHistory = async (req: ExtendedRequest, res: Response) => {
+  try {
+    const result = await pointService.getMyPointHistory(req.member);
+    res.status(HttpCode.OK).json(result);
+  } catch (err) {
+    console.log("Error, getPointHistory:", err);
     sendError(res, err);
   }
 };
