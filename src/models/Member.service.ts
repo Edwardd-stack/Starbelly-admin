@@ -4,7 +4,9 @@ import {
   Member,
   MemberInput,
   MemberUpdateInput,
+  MEMBER_SELF_UPDATE_FIELDS,
   MEMBER_SIGNUP_FIELDS,
+  TokenMember,
 } from "../libs/types/member";
 import Errors, { HttpCode, Message } from "../libs/Errors";
 import { MemberStatus, MemberType } from "../libs/enums/member.enum";
@@ -19,6 +21,17 @@ class MemberService {
   }
 
   /** SPA **/
+
+  // Restoran (yagona ADMIN) haqida ommaviy ma'lumot
+  public async getRestaurant(): Promise<Member> {
+    const result = await this.memberModel
+      .findOne({ memberType: MemberType.ADMIN })
+      .lean<Member>()
+      .exec();
+    if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+
+    return result;
+  }
 
   // Signup
   public async signup(input: MemberInput): Promise<Member> {
@@ -60,6 +73,55 @@ class MemberService {
     }
 
     return await this.memberModel.findById(member._id).lean().exec();
+  }
+
+  // Kirgan a'zoning o'z ma'lumotlari
+  public async getMemberDetail(member: TokenMember): Promise<Member> {
+    const memberId = shapeIntoMongooseObjectId(member._id);
+    const result = await this.memberModel
+      .findOne({ _id: memberId, memberStatus: MemberStatus.ACTIVE })
+      .lean<Member>()
+      .exec();
+    if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+
+    return result;
+  }
+
+  // A'zo o'z profilini yangilaydi (whitelist)
+  public async updateMember(
+    member: TokenMember,
+    input: Partial<MemberUpdateInput>,
+  ): Promise<Member> {
+    const data = pickFields(input, MEMBER_SELF_UPDATE_FIELDS);
+    if (Object.keys(data).length === 0)
+      throw new Errors(HttpCode.BAD_REQUEST, Message.INVALID_INPUT);
+
+    const memberId = shapeIntoMongooseObjectId(member._id);
+    try {
+      const result = await this.memberModel
+        .findOneAndUpdate({ _id: memberId }, data, { new: true, runValidators: true })
+        .lean<Member>()
+        .exec();
+      if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.UPDATE_FAILED);
+      return result;
+    } catch (err) {
+      if (err instanceof Errors) throw err;
+      throw new Errors(HttpCode.BAD_REQUEST, Message.USED_NICK_PHONE);
+    }
+  }
+
+  // Eng faol a'zolar (ball bo'yicha)
+  public async getTopUsers(): Promise<Member[]> {
+    return await this.memberModel
+      .find({
+        memberStatus: MemberStatus.ACTIVE,
+        memberType: MemberType.USER,
+        memberPoints: { $gte: 1 },
+      })
+      .sort({ memberPoints: -1 })
+      .limit(4)
+      .lean<Member[]>()
+      .exec();
   }
 
   /** SSR **/

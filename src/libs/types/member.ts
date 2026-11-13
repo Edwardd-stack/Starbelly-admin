@@ -41,6 +41,20 @@ export interface LoginInput {
   memberPassword: string;
 }
 
+/** JWT ichidagi ma'lumot (parol va shaxsiy ma'lumotsiz) */
+export interface TokenMember {
+  _id: string;
+  memberType: MemberType;
+  memberNick: string;
+}
+
+/** SPA so'rovi: verifyAuth'dan keyin req.member to'ldiriladi */
+export interface ExtendedRequest extends Request {
+  member: TokenMember;
+  file: Express.Multer.File;
+  files: Express.Multer.File[];
+}
+
 export interface MemberUpdateInput {
   _id: string;
   memberStatus?: MemberStatus;
@@ -64,6 +78,15 @@ export const MEMBER_SIGNUP_FIELDS = [
   "memberNick",
   "memberPhone",
   "memberPassword",
+  "memberAddress",
+  "memberDesc",
+  "memberImage",
+] as const;
+
+/** A'zo o'zi o'zgartira oladigan maydonlar (status, type, points — yo'q) */
+export const MEMBER_SELF_UPDATE_FIELDS = [
+  "memberNick",
+  "memberPhone",
   "memberAddress",
   "memberDesc",
   "memberImage",

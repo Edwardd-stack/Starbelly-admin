@@ -1,4 +1,6 @@
+import cors from "cors";
 import express from "express";
+import cookieParser from "cookie-parser";
 import path from "path";
 import router from "./router";
 import routerAdmin from "./router-admin";
@@ -19,8 +21,16 @@ const store = new MongoDBStore({
 /** 1-ENTRANCE **/
 const app = express();
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static("./uploads"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(
+  cors({
+    credentials: true, // cookie (accessToken) yuborilishi uchun
+    origin: (process.env.CLIENT_URL ?? "http://localhost:5000").split(","),
+  }),
+);
+app.use(cookieParser());
 app.use(morgan(MORGAN_FORMAT)); // Log mehanizm
 
 /** 2-SESSIONS integration **/

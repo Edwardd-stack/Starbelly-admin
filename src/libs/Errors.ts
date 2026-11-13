@@ -6,6 +6,7 @@ export enum HttpCode {
   UNAUTHORIZED = 401,
   FORBIDDEN = 403,
   NOT_FOUND = 404,
+  CONFLICT = 409,
   INTERNAL_SERVER_ERROR = 500,
 }
 
@@ -21,6 +22,7 @@ export enum Message {
   BLOCKED_USER = "You have been blocked, contact the admin!",
   WRONG_PASSWORD = "Wrong password, please try again!",
   NOT_AUTHENTICATED = "You are not authenticated, Please login first!",
+  TOKEN_CREATION_FAILED = "Token creation error!",
 }
 
 class Errors extends Error {
