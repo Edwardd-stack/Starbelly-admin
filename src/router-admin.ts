@@ -3,6 +3,7 @@ const routerAdmin = express.Router();
 import adminController from "./controllers/admin.controller";
 import productController from "./controllers/product.controller";
 import orderController from "./controllers/order.controller";
+import reservationController from "./controllers/reservation.controller";
 import makeUploader from "./libs/utils/uploader";
 
 /** Admin **/
@@ -44,6 +45,18 @@ routerAdmin.post(
   "/order/:id/finish",
   adminController.verifyAdmin,
   orderController.finishOrder,
+);
+
+/** Reservation Admin **/
+routerAdmin.get(
+  "/reservation/all",
+  adminController.verifyAdmin,
+  reservationController.getReservationsPage,
+);
+routerAdmin.post(
+  "/reservation/:id",
+  adminController.verifyAdmin,
+  reservationController.updateReservationStatus,
 );
 
 /** User Admin **/

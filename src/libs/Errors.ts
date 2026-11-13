@@ -20,6 +20,9 @@ export enum Message {
   INVALID_STATUS_CHANGE = "This status change is not allowed!",
   PAYMENT_AMOUNT_MISMATCH = "Payment amount does not match the order!",
   PAYMENT_FAILED = "Payment confirmation failed!",
+  ALREADY_RESERVED = "This table is already reserved for that time!",
+  INVALID_RESERVATION_TIME = "Reservation time is not available!",
+  TABLE_TOO_SMALL = "This table does not have enough seats!",
 
   USED_NICK_PHONE = "You are inserting already used nick or phone!",
   NO_MEMBER_NICK = "No member with that member nick!",

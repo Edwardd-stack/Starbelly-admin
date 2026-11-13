@@ -5,6 +5,7 @@ import makeUploader from "./libs/utils/uploader";
 import productController from "./controllers/product.controller";
 import orderController from "./controllers/order.controller";
 import paymentController from "./controllers/payment.controller";
+import reservationController from "./controllers/reservation.controller";
 
 /** Member **/
 router.get("/member/restaurant", memberController.getRestaurant);
@@ -34,5 +35,19 @@ router.post("/order/cancel", memberController.verifyAuth, orderController.cancel
 /** Payment (Toss) **/
 router.post("/payment/confirm", memberController.verifyAuth, paymentController.confirmPayment);
 router.post("/payment/webhook", paymentController.webhook);
+
+/** Reservation **/
+router.get("/reservation/availability", reservationController.getAvailability);
+router.post(
+  "/reservation/create",
+  memberController.verifyAuth,
+  reservationController.createReservation,
+);
+router.get("/reservation/my", memberController.verifyAuth, reservationController.getMyReservations);
+router.post(
+  "/reservation/cancel",
+  memberController.verifyAuth,
+  reservationController.cancelMyReservation,
+);
 
 export default router;
