@@ -6,3 +6,6 @@ dist
 uploads
 # OS
 .DS_Store
+
+# raw photos (webp versions are generated)
+_photos/
