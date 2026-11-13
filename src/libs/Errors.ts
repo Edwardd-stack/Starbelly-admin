@@ -16,6 +16,8 @@ export enum Message {
   CREATE_FAILED = "Create is failed!",
   UPDATE_FAILED = "Update is failed!",
   INVALID_INPUT = "Invalid input data!",
+  PRODUCT_UNAVAILABLE = "Some products are not available!",
+  INVALID_STATUS_CHANGE = "This status change is not allowed!",
 
   USED_NICK_PHONE = "You are inserting already used nick or phone!",
   NO_MEMBER_NICK = "No member with that member nick!",
