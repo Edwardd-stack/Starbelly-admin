@@ -1,0 +1,66 @@
+<%- include('includes/header') %>
+
+<link rel="stylesheet" type="text/css" href="/css/admin.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<body>
+  <canvas class="liquid-canvas"></canvas>
+
+  <div class="admin-container">
+    <%- include('includes/nav', { active: 'analytics' }) %>
+
+    <div class="admin-board">
+      <div class="board-head">
+        <div>
+          <h1 class="board-title">Analytics</h1>
+          <div class="board-sub">Oxirgi <%= dashboard.days %> kun · faqat to'langan buyurtmalar · KST</div>
+        </div>
+        <div class="range-tabs">
+          <% ranges.forEach(function(d) { %>
+            <a class="range-tab <%= d === dashboard.days ? 'active' : '' %>" href="/admin/analytics?days=<%= d %>"><%= d %> kun</a>
+          <% }) %>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="glass-card kpi"><span>Tushum</span><b>₩<%= dashboard.summary.revenue.toLocaleString('ko-KR') %></b></div>
+        <div class="glass-card kpi"><span>Buyurtmalar</span><b><%= dashboard.summary.orderCount %></b></div>
+        <div class="glass-card kpi"><span>O'rtacha chek</span><b>₩<%= dashboard.summary.avgOrderValue.toLocaleString('ko-KR') %></b></div>
+        <div class="glass-card kpi"><span>Yangi a'zolar</span><b><%= dashboard.summary.newMembers %></b></div>
+        <div class="glass-card kpi"><span>Bronlar</span><b><%= dashboard.summary.reservationCount %></b></div>
+      </div>
+
+      <div class="chart-grid">
+        <div class="glass-card chart-card wide">
+          <h3>Kunlik tushum</h3>
+          <canvas id="dailyChart"></canvas>
+        </div>
+        <div class="glass-card chart-card">
+          <h3>Top 5 taom</h3>
+          <% if (!dashboard.topProducts.length) { %>
+            <div class="empty-state">Ma'lumot yo'q</div>
+          <% } else { %>
+          <ol class="top-list">
+            <% dashboard.topProducts.forEach(function(p) { %>
+              <li><span><%= p.productName %></span><b><%= p.quantity %> ta</b><em>₩<%= p.revenue.toLocaleString('ko-KR') %></em></li>
+            <% }) %>
+          </ol>
+          <% } %>
+        </div>
+        <div class="glass-card chart-card">
+          <h3>Soatlar bo'yicha yuklama</h3>
+          <canvas id="hourlyChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.__DASHBOARD__ = <%- JSON.stringify(dashboard).replace(/</g, "\\u003c") %>;
+  </script>
+  <script src="/js/analytics.js"></script>
+  <script src="/js/background.js"></script>
+</body>
+
+<%- include('includes/footer') %>
+</html>

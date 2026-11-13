@@ -4,6 +4,7 @@ import adminController from "./controllers/admin.controller";
 import productController from "./controllers/product.controller";
 import orderController from "./controllers/order.controller";
 import reservationController from "./controllers/reservation.controller";
+import analyticsController from "./controllers/analytics.controller";
 import makeUploader from "./libs/utils/uploader";
 
 /** Admin **/
@@ -58,6 +59,13 @@ routerAdmin.post(
   "/reservation/:id",
   adminController.verifyAdmin,
   reservationController.updateReservationStatus,
+);
+
+/** Analytics **/
+routerAdmin.get(
+  "/analytics",
+  adminController.verifyAdmin,
+  analyticsController.getAnalyticsPage,
 );
 
 /** User Admin **/
