@@ -22,6 +22,33 @@ export interface Product {
   updatedAt: Date;
 }
 
+/** SPA: menyu so'rovi */
+export interface ProductInquiry {
+  order: ProductOrder;
+  page: number;
+  limit: number;
+  productCollection?: ProductCollection;
+  search?: string;
+}
+
+export type ProductOrder = "createdAt" | "productPrice" | "productViews" | "productLikes";
+export const PRODUCT_ORDERS: readonly ProductOrder[] = [
+  "createdAt",
+  "productPrice",
+  "productViews",
+  "productLikes",
+];
+
+export interface ProductList {
+  list: Product[];
+  total: number;
+}
+
+/** Tafsilot sahifasi: a'zo like bosganmi */
+export interface ProductDetail extends Product {
+  meLiked: boolean;
+}
+
 export interface ProductInput {
   productStatus?: ProductStatus;
   productCollection: ProductCollection;
