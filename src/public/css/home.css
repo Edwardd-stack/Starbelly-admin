@@ -96,6 +96,9 @@ body {
 }
 
 .home-container .btn-home {
+  /* flex ustunida cho'zilib ketmasin — matn kengligida, markazda */
+  align-self: center;
+  min-width: 300px;
   display: inline-block;
   padding: 1rem 2rem;
   font-size: 20px;
