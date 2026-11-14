@@ -1,3 +1,5 @@
+import { inspect } from "util";
+
 export enum HttpCode {
   OK = 200,
   CREATED = 201,
@@ -45,6 +47,11 @@ class Errors extends Error {
     super();
     this.code = statusCode;
     this.message = statusMessage;
+  }
+
+  // Kutilgan xatolar (400, 401, 409 ...) logda bitta qator bo'lib chiqadi, stack trace'siz
+  [inspect.custom]() {
+    return `Errors(${this.code}): ${this.message}`;
   }
 }
 
