@@ -9,8 +9,24 @@
   --line: rgba(248, 250, 252, 0.12);
 }
 
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: #030712;
+}
+
+/* Fon animatsiyasi kontent orqasida turadi va bosishlarga xalaqit bermaydi */
+.liquid-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
 .admin-container {
   position: relative;
+  z-index: 1;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
