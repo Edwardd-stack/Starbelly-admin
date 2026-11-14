@@ -4,7 +4,8 @@ services:
     name: starbelly-api
     runtime: node
     plan: free
-    buildCommand: npm ci && npm run build
+    # NODE_ENV=production bo'lsa npm devDependencies'ni (typescript) o'rnatmaydi — shuning uchun --include=dev
+    buildCommand: npm ci --include=dev && npm run build
     startCommand: npm start
     healthCheckPath: /member/restaurant
     envVars:
