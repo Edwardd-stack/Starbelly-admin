@@ -1,7 +1,23 @@
-# 🍽️ Starbelly — 레스토랑 주문·예약 플랫폼 (Backend + Admin)
+# 🍽️ Starbelly — 레스토랑 주문·결제·예약 플랫폼
 
-> 메뉴 주문, **토스페이먼츠 결제**, **실시간 주방 화면**, **동시성이 보장된 테이블 예약**, **포인트 원장**을 갖춘 레스토랑 서비스의 백엔드와 관리자 페이지입니다.
-> 프론트엔드: [Starbelly-react-vite](https://github.com/Edwardd-stack/Starbelly-react-vite)
+> 부산 센텀시티의 가상 레스토랑 **Starbelly**를 위한 풀스택 서비스입니다.
+> 고객은 메뉴를 주문하고 **토스페이먼츠로 결제**하며 **테이블을 예약**하고, 매장은 **실시간 주방 화면**과 **매출 분석**으로 운영합니다.
+
+**🔗 Live Demo:** `배포 후 추가` · **Frontend:** [Starbelly-react-vite](https://github.com/Edwardd-stack/Starbelly-react-vite) · **Backend + Admin:** 이 저장소
+
+## ⏱️ 30초 요약 (HR / 채용 담당자용)
+
+| | |
+| --- | --- |
+| **무엇을** | 실제 서비스 흐름(주문 → 결제 → 주방 → 완료 → 포인트)을 끝까지 구현한 레스토랑 플랫폼 |
+| **역할** | 1인 개발 — 기획, DB 설계, 백엔드 API, 관리자 페이지, React 프론트엔드, 테스트, 배포 |
+| **차별점** | ① 동시 예약 충돌을 DB 레벨에서 차단 ② 결제 금액 서버 검증 + 멱등성 ③ Socket.IO 실시간 주방 ④ 트랜잭션 기반 포인트 원장 |
+| **품질** | Jest + Supertest 13개 테스트 (동시성 테스트 포함), GitHub Actions CI, Docker |
+| **화면** | 한국어 / English 지원, 모바일·태블릿 반응형, 카카오맵 |
+
+---
+
+## 🧰 기술 스택
 
 | | |
 | --- | --- |
@@ -56,6 +72,9 @@ SPA API와 관리자 페이지가 같은 service를 재사용합니다.
 ---
 
 ## 🗂️ ERD
+
+<details>
+<summary>ERD 펼치기</summary>
 
 ```mermaid
 erDiagram
@@ -132,6 +151,8 @@ erDiagram
   }
 ```
 
+</details>
+
 ---
 
 ## 💡 기술적 의사결정
@@ -173,6 +194,9 @@ Socket.IO 연결 시 관리자는 세션 쿠키, 고객은 JWT 쿠키로 인증�
 
 ## 📡 API
 
+<details>
+<summary>API 목록 펼치기</summary>
+
 | Method | Path | Auth | 설명 |
 | --- | --- | --- | --- |
 | POST | `/member/signup` · `/member/login` | – | 회원가입·로그인 (httpOnly 쿠키 발급) |
@@ -191,6 +215,8 @@ Socket.IO 연결 시 관리자는 세션 쿠키, 고객은 JWT 쿠키로 인증�
 | POST | `/reservation/create` · `/reservation/cancel` | JWT | 예약 (중복 시 409) · 취소 |
 | GET | `/reservation/my` | JWT | 내 예약 |
 | — | `/admin/*` | Session | 메뉴·회원 관리, **Kitchen**, **Reservations**, **Analytics** |
+
+</details>
 
 ---
 
