@@ -1,0 +1,148 @@
+/* =====================================================================
+   ADMIN RESPONSIVE — barcha sahifalar uchun umumiy (includes/footer.ejs
+   orqali eng oxirida yuklanadi). Planshet ≤900px, telefon ≤600px.
+   ===================================================================== */
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+/* Keng doskalar ekrandan chiqib ketmasin */
+.products-container .restaurant-menu-frame .board,
+.users-container .users-frame .board {
+  width: min(1320px, 94vw);
+}
+
+/* ---------- PLANSHET ---------- */
+@media (max-width: 900px) {
+  /* Navigatsiya: absolute emas, oqimda, qatorlarga bo'linadi */
+  .admin-container .navigation-menu,
+  .products-container .navigation-menu,
+  .users-container .navigation-menu {
+    position: relative;
+    top: 0;
+    width: 100%;
+    padding: 14px 10px 0;
+    font-size: 22px;
+  }
+
+  .navigation-menu .nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2px 4px;
+  }
+
+  .navigation-menu .nav-link {
+    padding: 4px 10px;
+  }
+
+  .admin-board {
+    margin-top: 24px;
+  }
+
+  .products-container .restaurant-menu-frame .board,
+  .users-container .users-frame .board {
+    margin-top: 28px;
+  }
+
+  /* Jadvallar: o'z ichida gorizontal scroll */
+  .products-container .table,
+  .users-container .table,
+  .admin-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .products-container .new-dish-txt {
+    font-size: 22px;
+    padding: 12px 20px;
+  }
+
+  /* Bosh sahifa */
+  .home-container .navigation-menu {
+    margin: 0 0 20px;
+    font-size: 22px;
+  }
+
+  .home-container .parag {
+    font-size: 96px;
+  }
+
+  .home-container .message {
+    font-size: 18px;
+    margin: 1.2rem 0;
+  }
+}
+
+/* ---------- TELEFON ---------- */
+@media (max-width: 600px) {
+  .admin-container .navigation-menu,
+  .products-container .navigation-menu,
+  .users-container .navigation-menu,
+  .home-container .navigation-menu {
+    font-size: 16px;
+  }
+
+  .navigation-menu .nav-link {
+    padding: 4px 8px;
+  }
+
+  .admin-board {
+    width: 94vw;
+    padding-bottom: 50px;
+  }
+
+  .admin-board .board-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .board-title {
+    font-size: 24px !important;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .kpi-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+
+  .products-container .table,
+  .users-container .table,
+  .admin-table {
+    font-size: 13px;
+  }
+
+  /* Yangi taom formasi: ustun bo'lib */
+  .products-container .dish-container .half-input-frame {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .products-container .half-input-frame .half-input {
+    width: 100% !important;
+  }
+
+  .home-container {
+    padding: 1rem;
+  }
+
+  .home-container .parag {
+    font-size: 64px;
+  }
+
+  .home-container .message {
+    font-size: 15px;
+  }
+
+  .home-container .btn-home {
+    padding: 0.8rem 1.6rem;
+    font-size: 17px;
+  }
+}
