@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import path from "path";
 import router from "./router";
 import routerAdmin from "./router-admin";
+import { uploadErrorHandler } from "./libs/utils/uploader";
 import morgan from "morgan";
 import { MORGAN_FORMAT } from "./libs/config";
 
@@ -59,5 +60,6 @@ app.set("view engine", "ejs");
 /** 4-ROUTERS **/
 app.use("/admin", routerAdmin); // BSSR: EJS
 app.use("/", router); // SPA: REACT // Middleware Design Pattern
+app.use(uploadErrorHandler); // multer: noto'g'ri fayl / hajm -> 400
 
 export default app;

@@ -25,6 +25,9 @@ export enum Message {
   ALREADY_RESERVED = "This table is already reserved for that time!",
   INVALID_RESERVATION_TIME = "Reservation time is not available!",
   TABLE_TOO_SMALL = "This table does not have enough seats!",
+  INVALID_IMAGE_FILE = "Only JPG, PNG, WEBP or GIF images are allowed!",
+  FILE_TOO_LARGE = "Image is too large, maximum size is 5MB!",
+  TOO_MANY_FILES = "Too many files uploaded!",
 
   USED_NICK_PHONE = "You are inserting already used nick or phone!",
   NO_MEMBER_NICK = "No member with that member nick!",
