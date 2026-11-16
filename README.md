@@ -3,7 +3,9 @@
 > 부산 센텀시티의 가상 레스토랑 **Starbelly**를 위한 풀스택 서비스입니다.
 > 고객은 메뉴를 주문하고 **토스페이먼츠로 결제**하며 **테이블을 예약**하고, 매장은 **실시간 주방 화면**과 **매출 분석**으로 운영합니다.
 
-**🔗 Live Demo:** `배포 후 추가` · **Frontend:** [Starbelly-react-vite](https://github.com/Edwardd-stack/Starbelly-react-vite) · **Backend + Admin:** 이 저장소
+**🔗 Live Demo:** [starbelly-web.vercel.app](https://starbelly-web.vercel.app) · **Admin:** [starbelly-api.onrender.com/admin](https://starbelly-api.onrender.com/admin) · **Frontend:** [Starbelly-react-vite](https://github.com/Edwardd-stack/Starbelly-react-vite)
+
+> 🧪 데모 계정: `qa_demo` / `qa12345` · 결제는 토스페이먼츠 **테스트 모드** (실제 결제 없음) · 무료 서버라 첫 접속 시 30~50초 걸릴 수 있습니다.
 
 ## ⏱️ 30초 요약 (HR / 채용 담당자용)
 
