@@ -6,6 +6,10 @@ import productController from "./controllers/product.controller";
 import orderController from "./controllers/order.controller";
 import paymentController from "./controllers/payment.controller";
 import reservationController from "./controllers/reservation.controller";
+import healthController from "./controllers/health.controller";
+
+/** Health (uptime monitor) **/
+router.get("/health", healthController.check);
 
 /** Member **/
 router.get("/member/restaurant", memberController.getRestaurant);
