@@ -1,0 +1,18 @@
+# Zaxira: server biror sababdan uxlab qolsa (deploy, restart), tashqaridan uyg'otadi.
+# Asosiy usul — src/libs/utils/keepAlive.ts (server o'zini har 10 daqiqada ping qiladi).
+name: Keep Render awake
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Ping /health
+        run: |
+          curl -fsS --retry 3 --retry-delay 20 --max-time 60 \
+            https://starbelly-api.onrender.com/health

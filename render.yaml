@@ -7,7 +7,7 @@ services:
     # NODE_ENV=production bo'lsa npm devDependencies'ni (typescript) o'rnatmaydi — shuning uchun --include=dev
     buildCommand: npm ci --include=dev && npm run build
     startCommand: npm start
-    healthCheckPath: /member/restaurant
+    healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production

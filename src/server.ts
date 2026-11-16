@@ -6,6 +6,7 @@ import app, { sessionMiddleware } from "./app";
 import { initSocket } from "./libs/socket";
 import ReservationService from "./models/Reservation.service";
 import { restoreSeedImages } from "./libs/utils/seedImages";
+import { startKeepAlive } from "./libs/utils/keepAlive";
 
 mongoose
   .connect(process.env.MONGO_URL as string, {})
@@ -25,6 +26,7 @@ mongoose
     server.listen(PORT, function () {
       console.info(`The server is running successfully on port: ${PORT}`);
       console.info(`Admin project on http://localhost:${PORT}/admin \n`);
+      startKeepAlive();
     });
   })
   .catch((err) => console.log("ERROR on connection MongoDB", err));
