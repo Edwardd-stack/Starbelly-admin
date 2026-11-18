@@ -16,7 +16,7 @@ new Chart(document.getElementById("dailyChart"), {
     labels: data.daily.map((d) => d.date.slice(5)),
     datasets: [
       {
-        label: "Tushum",
+        label: "Revenue",
         data: data.daily.map((d) => d.revenue),
         borderColor: accent,
         backgroundColor: "rgba(245, 195, 50, 0.12)",
@@ -31,7 +31,7 @@ new Chart(document.getElementById("dailyChart"), {
       legend: { display: false },
       tooltip: {
         callbacks: {
-          label: (ctx) => `${won(ctx.parsed.y)} · ${data.daily[ctx.dataIndex].orderCount} ta buyurtma`,
+          label: (ctx) => `${won(ctx.parsed.y)} · ${data.daily[ctx.dataIndex].orderCount} orders`,
         },
       },
     },
@@ -48,7 +48,7 @@ new Chart(document.getElementById("hourlyChart"), {
     labels: data.hourly.map((h) => `${h.hour}`),
     datasets: [
       {
-        label: "Buyurtmalar",
+        label: "Orders",
         data: data.hourly.map((h) => h.orderCount),
         backgroundColor: "rgba(79, 70, 229, 0.8)",
         borderRadius: 4,
@@ -58,7 +58,7 @@ new Chart(document.getElementById("hourlyChart"), {
   options: {
     plugins: { legend: { display: false } },
     scales: {
-      x: { grid: { display: false }, title: { display: true, text: "soat (KST)" } },
+      x: { grid: { display: false }, title: { display: true, text: "hour (KST)" } },
       y: { grid: { color: grid }, ticks: { precision: 0 } },
     },
   },

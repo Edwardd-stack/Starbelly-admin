@@ -40,7 +40,7 @@ const renderCard = (order) => {
     <ul>${items}</ul>
     <div class="card-foot">
       <b>${formatWon(order.orderTotal)}</b>
-      <button class="btn-pill btn-ok finish-btn" data-order-id="${order._id}">Tayyor</button>
+      <button class="btn-pill btn-ok finish-btn" data-order-id="${order._id}">Done</button>
     </div>`;
   return card;
 };
@@ -63,7 +63,7 @@ grid.addEventListener("click", async (e) => {
   } catch (err) {
     console.log(err);
     button.disabled = false;
-    alert("Buyurtmani yakunlab bo'lmadi!");
+    alert("Could not complete the order!");
   }
 });
 
@@ -81,8 +81,8 @@ socket.on("order:new", (order) => {
   if (grid.querySelector(`[data-order-id="${order._id}"]`)) return;
   grid.appendChild(renderCard(order));
   refreshEmpty();
-  showToast("Yangi buyurtma keldi!");
+  showToast("New order received!");
 });
 socket.on("reservation:new", (r) => {
-  showToast(`Yangi bron: ${r.reservationDate} ${r.timeSlot}, ${r.guestCount} kishi`);
+  showToast(`New reservation: ${r.reservationDate} ${r.timeSlot}, ${r.guestCount} guests`);
 });

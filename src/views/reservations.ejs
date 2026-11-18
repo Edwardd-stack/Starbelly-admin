@@ -12,7 +12,7 @@
       <div class="board-head">
         <div>
           <h1 class="board-title">Reservations</h1>
-          <div class="board-sub"><%= reservations.length %> ta bron</div>
+          <div class="board-sub"><%= reservations.length %> reservations</div>
         </div>
         <form class="date-form" method="get" action="/admin/reservation/all">
           <input type="date" name="date" value="<%= date %>" onchange="this.form.submit()" />
@@ -21,28 +21,28 @@
       </div>
 
       <% if (!reservations.length) { %>
-        <div class="empty-state">Bu kunga bron yo'q</div>
+        <div class="empty-state">No reservations for this day</div>
       <% } else { %>
       <table class="admin-table">
         <thead>
-          <tr><th>Vaqt</th><th>Stol</th><th>Mehmon</th><th>Mijoz</th><th>Izoh</th><th>Holat</th><th></th></tr>
+          <tr><th>Time</th><th>Table</th><th>Guests</th><th>Customer</th><th>Note</th><th>Status</th><th></th></tr>
         </thead>
         <tbody>
           <% reservations.forEach(function(r) { %>
           <tr data-id="<%= r._id %>">
             <td><b><%= r.timeSlot %></b></td>
-            <td>№<%= r.tableData.tableNumber %> <span class="board-sub">(<%= r.tableData.tableSeats %> o'rin)</span></td>
-            <td><%= r.guestCount %> kishi</td>
+            <td>№<%= r.tableData.tableNumber %> <span class="board-sub">(<%= r.tableData.tableSeats %> seats)</span></td>
+            <td><%= r.guestCount %> guests</td>
             <td><%= r.memberData.memberNick %><br /><span class="board-sub"><%= r.memberData.memberPhone %></span></td>
             <td class="board-sub"><%= r.reservationMemo || '—' %></td>
             <td><span class="status-badge status-<%= r.reservationStatus %>"><%= r.reservationStatus %></span></td>
             <td style="white-space: nowrap">
               <% if (r.reservationStatus === 'PAUSE') { %>
-                <button class="btn-pill btn-ok status-btn" data-status="CONFIRM">Tasdiqlash</button>
-                <button class="btn-pill btn-danger status-btn" data-status="CANCEL">Bekor</button>
+                <button class="btn-pill btn-ok status-btn" data-status="CONFIRM">Confirm</button>
+                <button class="btn-pill btn-danger status-btn" data-status="CANCEL">Cancel</button>
               <% } else if (r.reservationStatus === 'CONFIRM') { %>
-                <button class="btn-pill btn-warn status-btn" data-status="FINISH">Keldi</button>
-                <button class="btn-pill btn-danger status-btn" data-status="CANCEL">Bekor</button>
+                <button class="btn-pill btn-warn status-btn" data-status="FINISH">Arrived</button>
+                <button class="btn-pill btn-danger status-btn" data-status="CANCEL">Cancel</button>
               <% } %>
             </td>
           </tr>

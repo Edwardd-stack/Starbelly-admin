@@ -13,42 +13,42 @@
       <div class="board-head">
         <div>
           <h1 class="board-title">Analytics</h1>
-          <div class="board-sub">Oxirgi <%= dashboard.days %> kun · faqat to'langan buyurtmalar · KST</div>
+          <div class="board-sub">Last <%= dashboard.days %> days · paid orders only · KST</div>
         </div>
         <div class="range-tabs">
           <% ranges.forEach(function(d) { %>
-            <a class="range-tab <%= d === dashboard.days ? 'active' : '' %>" href="/admin/analytics?days=<%= d %>"><%= d %> kun</a>
+            <a class="range-tab <%= d === dashboard.days ? 'active' : '' %>" href="/admin/analytics?days=<%= d %>"><%= d %> days</a>
           <% }) %>
         </div>
       </div>
 
       <div class="kpi-grid">
-        <div class="glass-card kpi"><span>Tushum</span><b>₩<%= dashboard.summary.revenue.toLocaleString('ko-KR') %></b></div>
-        <div class="glass-card kpi"><span>Buyurtmalar</span><b><%= dashboard.summary.orderCount %></b></div>
-        <div class="glass-card kpi"><span>O'rtacha chek</span><b>₩<%= dashboard.summary.avgOrderValue.toLocaleString('ko-KR') %></b></div>
-        <div class="glass-card kpi"><span>Yangi a'zolar</span><b><%= dashboard.summary.newMembers %></b></div>
-        <div class="glass-card kpi"><span>Bronlar</span><b><%= dashboard.summary.reservationCount %></b></div>
+        <div class="glass-card kpi"><span>Revenue</span><b>₩<%= dashboard.summary.revenue.toLocaleString('ko-KR') %></b></div>
+        <div class="glass-card kpi"><span>Orders</span><b><%= dashboard.summary.orderCount %></b></div>
+        <div class="glass-card kpi"><span>Avg. order</span><b>₩<%= dashboard.summary.avgOrderValue.toLocaleString('ko-KR') %></b></div>
+        <div class="glass-card kpi"><span>New members</span><b><%= dashboard.summary.newMembers %></b></div>
+        <div class="glass-card kpi"><span>Reservations</span><b><%= dashboard.summary.reservationCount %></b></div>
       </div>
 
       <div class="chart-grid">
         <div class="glass-card chart-card wide">
-          <h3>Kunlik tushum</h3>
+          <h3>Daily revenue</h3>
           <canvas id="dailyChart"></canvas>
         </div>
         <div class="glass-card chart-card">
-          <h3>Top 5 taom</h3>
+          <h3>Top 5 dishes</h3>
           <% if (!dashboard.topProducts.length) { %>
-            <div class="empty-state">Ma'lumot yo'q</div>
+            <div class="empty-state">No data</div>
           <% } else { %>
           <ol class="top-list">
             <% dashboard.topProducts.forEach(function(p) { %>
-              <li><span><%= p.productName %></span><b><%= p.quantity %> ta</b><em>₩<%= p.revenue.toLocaleString('ko-KR') %></em></li>
+              <li><span><%= p.productName %></span><b><%= p.quantity %> sold</b><em>₩<%= p.revenue.toLocaleString('ko-KR') %></em></li>
             <% }) %>
           </ol>
           <% } %>
         </div>
         <div class="glass-card chart-card">
-          <h3>Soatlar bo'yicha yuklama</h3>
+          <h3>Orders by hour</h3>
           <canvas id="hourlyChart"></canvas>
         </div>
       </div>

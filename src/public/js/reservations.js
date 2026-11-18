@@ -14,14 +14,14 @@ document.addEventListener("click", async (e) => {
   if (!button) return;
   const row = button.closest("tr");
   const status = button.dataset.status;
-  if (status === "CANCEL" && !confirm("Bronni bekor qilasizmi?")) return;
+  if (status === "CANCEL" && !confirm("Cancel this reservation?")) return;
 
   try {
     await axios.post(`/admin/reservation/${row.dataset.id}`, { reservationStatus: status });
     window.location.reload();
   } catch (err) {
     console.log(err);
-    alert("Holatni o'zgartirib bo'lmadi!");
+    alert("Could not change the status!");
   }
 });
 
@@ -35,6 +35,6 @@ socket.on("disconnect", () => {
   liveStatus.classList.remove("on");
 });
 socket.on("reservation:new", (r) => {
-  showToast(`Yangi bron: ${r.reservationDate} ${r.timeSlot}, ${r.guestCount} kishi — yangilash uchun bosing`);
+  showToast(`New reservation: ${r.reservationDate} ${r.timeSlot}, ${r.guestCount} guests — click to refresh`);
   toast.onclick = () => window.location.reload();
 });
